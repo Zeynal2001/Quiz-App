@@ -1,6 +1,6 @@
 ﻿namespace Quiz_App.Models
 {
-    public class Admin
+    public class Users
     {
 
     }

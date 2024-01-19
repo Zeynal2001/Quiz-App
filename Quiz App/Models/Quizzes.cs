@@ -1,6 +1,6 @@
 ﻿namespace Quiz_App.Models
 {
-    public class Customer
+    public class Quizzes
     {
 
     }

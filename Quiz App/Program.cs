@@ -18,7 +18,7 @@ if (conn.State == System.Data.ConnectionState.Open)
 
 conn.Close();
 if (conn.State == System.Data.ConnectionState.Closed)
-    Console.WriteLine("Connection uğursuz oldu");
+    Console.WriteLine("Connection bağlandı və ya uğursuz oldu");
 
 Menu.MainMenu();
 Menu.AdminMenu();
