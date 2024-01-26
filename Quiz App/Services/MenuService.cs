@@ -31,7 +31,7 @@
             Console.WriteLine("\n-----------------------------------");
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Aşağıda etmək istədiyiniz əməliyyatı seçin: (1/13)");
-            Console.WriteLine("1. Quizləri yaratmaq.");
+            Console.WriteLine("1. Quizləri yaratmaq");
             Console.WriteLine("2. Quizləri yeniləmək");
             Console.WriteLine("3. Quizləri silmək");
             Console.WriteLine("4. Sualları yaratmaq");

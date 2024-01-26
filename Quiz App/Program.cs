@@ -2,6 +2,7 @@
 using Quiz_App.Enums;
 using Quiz_App.Extensions;
 using Quiz_App.Models;
+using Quiz_App.Operating_Methods;
 using Quiz_App.Services;
 using System.Data.SqlClient;
 Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -197,7 +198,8 @@ switch (girisTipi)
                 {
                     //Quizləri yaratmaq
                     case 1:
-
+                        ForAdmin.AddQuizzes(conn);
+                        duzdurmu2 = false;
                         break;
                     //Quizləri yeniləmək
                     case 2:
