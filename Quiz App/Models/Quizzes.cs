@@ -9,5 +9,10 @@
         public DateTime? EndTime { get; set; }
         public int? CategoryId { get; set; }
         public string QuizTitle { get; set; }
+
+        public override string ToString()
+        {
+            return $"{QuizId} || {QuizName} || {Description} || {StartTime} || {EndTime} || {CategoryId} || {QuizTitle}";
+        }
     }
 }

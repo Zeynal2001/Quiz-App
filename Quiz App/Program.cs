@@ -203,11 +203,13 @@ switch (girisTipi)
                         break;
                     //Quizləri yeniləmək
                     case 2:
-
+                        ForAdmin.UpdateQuizzes(conn);
+                        duzdurmu2 = false;
                         break;
                     //Quizləri silmək
                     case 3:
-
+                        ForAdmin.RemoveQuizzes(conn);
+                        duzdurmu2 = false;
                         break;
                     //Sualları yaratmaq
                     case 4:
