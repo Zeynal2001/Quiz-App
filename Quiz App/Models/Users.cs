@@ -8,6 +8,12 @@
         public string UserEmail { get; set; }
         public string UserPassword { get; set; }
         public UserRole Role { get; set; }
+
+
+        public override string ToString()
+        {
+            return "UserID  ||  FirstName  ||  LastName  ||  UserEmail  ||  UserPassword  ||  Roles  ||";
+        }
     }
     
     public enum UserRole

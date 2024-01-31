@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Quiz_App.SELECTMethods
 {
-    public class QuizCrud
+    public class QuizAndQuestionCrud
     {
         public static List<Quizzes> SelectQuizzes(SqlConnection conn)
         {
@@ -47,6 +47,43 @@ namespace Quiz_App.SELECTMethods
             reader.Close();
 
             return quizlist;
+        }
+
+        public static List<Questions> SelectQuestions(SqlConnection conn)
+        {
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.Open();
+            }
+
+            var select = "SELECT * FROM Questions";
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = select;
+            var reader = cmd.ExecuteReader();
+
+
+            List<Questions> questionlist = new List<Questions>();
+
+
+            while (reader.Read())
+            {
+                var question = new Questions();
+
+                question.QuestionId = Convert.ToInt32(reader["QuestionID"]);
+                question.QuestionText = Convert.ToString(reader["QuestionText"]);
+                question.CorrectOption = Convert.ToInt32(reader["CorrectOption"]);
+                question.OptionA = Convert.ToString(reader["OptionA"]);
+                question.OptionB = Convert.ToString(reader["OptionB"]);
+                question.OptionC = Convert.ToString(reader["OptionC"]);
+                question.OptionD = Convert.ToString(reader["OptionD"]);
+                question.QuizId = Convert.ToInt32(reader["QuizID"]);
+
+                questionlist.Add(question);
+            }
+            reader.Close();
+
+            return questionlist;
         }
     }
 }

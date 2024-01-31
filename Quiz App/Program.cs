@@ -213,27 +213,33 @@ switch (girisTipi)
                         break;
                     //Sualları yaratmaq
                     case 4:
-
+                        ForAdmin.AddQuestions(conn);
+                        duzdurmu2 = false;
                         break;
                     //Sualları yeniləmək
                     case 5:
-
+                        ForAdmin.UpdateQuestions(conn);
+                        duzdurmu2 = false;
                         break;
                     //Sualları silmək
                     case 6:
-
+                        ForAdmin.RemoveQuestions(conn);
+                        duzdurmu2 = false;
                         break;
                     //İstifadəçi hesabını yaratmaq
                     case 7:
-
+                        ForAdmin.AddUser(conn); 
+                        duzdurmu2 = false;
                         break;
                     //İstifadəçi hesabını yeniləmək
                     case 8:
-
+                        ForAdmin.UpdateUser(conn);
+                        duzdurmu2 = false;
                         break;
                     //İstifadəçi hesabını silmək
                     case 9:
-
+                        ForAdmin.RemoveUser(conn);
+                        duzdurmu2 = false;
                         break;
                     //İstifadəçilərin istatistik məlumatlarına baxmaq
                     case 10:
@@ -241,10 +247,6 @@ switch (girisTipi)
                         break;
                     //Proqramı dayandır
                     case 11:
-
-                        break;
-                    //Programı sıfırla
-                    case 12:
 
                         break;
                     default:

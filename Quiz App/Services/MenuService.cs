@@ -42,7 +42,6 @@
             Console.WriteLine("9. İstifadəçi hesabını silmək");
             Console.WriteLine("10. İstifadəçilərin istatistik məlumatlarına baxmaq");
             Console.WriteLine("11. Proqramı dayandır");
-            Console.WriteLine("12. Programı sıfırla");
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("-----------------------------------");
         }
