@@ -1,6 +1,6 @@
 ﻿namespace Quiz_App.Models
 {
-    public class Users
+    public class User
     {
         public int UserId { get; set; }
         public string FirstName { get; set; }
@@ -12,7 +12,7 @@
 
         public override string ToString()
         {
-            return "UserID  ||  FirstName  ||  LastName  ||  UserEmail  ||  UserPassword  ||  Roles  ||";
+            return $"{UserId}  ||  {FirstName}  ||  {LastName}  ||  {UserEmail}  ||  {UserPassword}  ||  {Role}  ||";
         }
     }
     

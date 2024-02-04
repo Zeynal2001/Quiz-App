@@ -1,4 +1,5 @@
 ﻿using Quiz_App.CustomExceptions;
+using Quiz_App.DataTransferObject;
 using Quiz_App.Enums;
 using Quiz_App.Extensions;
 using Quiz_App.Models;
@@ -14,7 +15,7 @@ var conn = new SqlConnection(connStr);
 conn.Open();
 
 if (conn.State == System.Data.ConnectionState.Open)
-   Console.WriteLine("Ugurla qosuldu");
+    ConsoleExtensions.PrintMessage("Databazaya uğurla qoşuldu.", MessageType.Success);
 
 
 
@@ -22,7 +23,7 @@ if (conn.State == System.Data.ConnectionState.Open)
 MenuService.MainMenu();
 
 var girisTipi = UserRole.None;
-
+User user = new();
 int secim1 = InputExtensions.GetInt();
 //Əsas giriş
 switch (secim1)
@@ -43,7 +44,7 @@ switch (secim1)
                 {
                     //Login olmaq
                     case 1:
-                        AuthService.Login(conn, UserRole.Admin);
+                        user = AuthService.Login(conn, UserRole.Admin);
                         duzdurmu = false;
                         girisTipi = UserRole.Admin;
                         break;
@@ -92,7 +93,7 @@ switch (secim1)
                 {
                     //Login olmaq
                     case 1:
-                        AuthService.Login(conn, UserRole.User);
+                        user =  AuthService.Login(conn, UserRole.User);
                         duzdurmu2 = false;
                         girisTipi = UserRole.User;
                         break;
@@ -158,7 +159,16 @@ switch (girisTipi)
                         break;
                     //İştirak etdiyi quizlərə və nəticələrinə baxmaq
                     case 2:
-
+                        var scores = UserScorDTO.JoinScore(conn, user.UserId);
+                        foreach (var score in scores)
+                        {
+                            ConsoleExtensions.PrintMessage("\n-----------------------------------", MessageType.Success);
+                            Console.WriteLine($"Adınız və Familyanız :{score.FullName} || İştirak etdiyiniz sınaqlar: {score.QuizId}");
+                            Console.WriteLine($" Düzgün cavabların sayı: {score.CorrectAnswers} Yanlış cavabların sayı {score.IncorrectAnswers}");
+                            Console.WriteLine($"Total xalınız: {score.TotalScore}");
+                            ConsoleExtensions.PrintMessage("\n-----------------------------------", MessageType.Success);
+                        }
+                        duzdurmu1 = false;
                         break;
                     //Proqramı dayandırmaq
                     case 3:
@@ -243,12 +253,13 @@ switch (girisTipi)
                         break;
                     //İstifadəçilərin istatistik məlumatlarına baxmaq
                     case 10:
-
+                        ForAdmin.GetUsersStatistics(conn);
+                        duzdurmu2 = false;
                         break;
                     //Proqramı dayandır
                     case 11:
-
-                        break;
+                        ConsoleExtensions.PrintMessage("Proqram bağlandı.");
+                        return;
                     default:
                         //Yanlış seçim
                         ConsoleExtensions.PrintMessage("Yanlış seçim etmisiniz 😕.", MessageType.Error);
@@ -279,4 +290,4 @@ switch (girisTipi)
 
 conn.Close();
 if (conn.State == System.Data.ConnectionState.Closed)
-    Console.WriteLine("Connection bağlandı və ya uğursuz oldu");
+    ConsoleExtensions.PrintMessage("Connection bağlandı və ya uğursuz oldu", MessageType.Info);

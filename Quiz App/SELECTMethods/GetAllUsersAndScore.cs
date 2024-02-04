@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Quiz_App.SELECTMethods
 {
-    public class GetAllUsers
+    public class GetAllUsersAndScore
     {
-        public static List<Users> GetUsers(SqlConnection conn)
+        public static List<User> GetUsers(SqlConnection conn)
         {
             if (conn.State != ConnectionState.Open)
             {
@@ -25,12 +25,12 @@ namespace Quiz_App.SELECTMethods
             var reader = cmd.ExecuteReader();
 
 
-            List<Users> userlist = new List<Users>();
+            List<User> userlist = new List<User>();
 
 
             while (reader.Read())
             {
-                var user = new Users();
+                var user = new User();
 
                 user.UserId = Convert.ToInt32(reader["UserID"]);
                 user.FirstName = Convert.ToString(reader["FirstName"]);
@@ -54,5 +54,8 @@ namespace Quiz_App.SELECTMethods
             Roles
             */
         }
+
+       
+
     }
 }

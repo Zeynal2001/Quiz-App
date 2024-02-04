@@ -11,7 +11,7 @@ namespace Quiz_App.SELECTMethods
 {
     public class QuizAndQuestionCrud
     {
-        public static List<Quizzes> SelectQuizzes(SqlConnection conn)
+        public static List<Quiz> SelectQuizzes(SqlConnection conn)
         {
             if (conn.State != ConnectionState.Open)
             {
@@ -25,12 +25,12 @@ namespace Quiz_App.SELECTMethods
             var reader = cmd.ExecuteReader();
                
             
-            List<Quizzes> quizlist = new List<Quizzes>();
+            List<Quiz> quizlist = new List<Quiz>();
 
 
             while (reader.Read())
             {
-                var quiz = new Quizzes();
+                var quiz = new Quiz();
 
                 quiz.QuizId = Convert.ToInt32(reader["QuizID"]);
                 quiz.QuizName = Convert.ToString(reader["QuizName"]);
@@ -49,7 +49,7 @@ namespace Quiz_App.SELECTMethods
             return quizlist;
         }
 
-        public static List<Questions> SelectQuestions(SqlConnection conn)
+        public static List<Question> SelectQuestions(SqlConnection conn)
         {
             if (conn.State != ConnectionState.Open)
             {
@@ -63,12 +63,12 @@ namespace Quiz_App.SELECTMethods
             var reader = cmd.ExecuteReader();
 
 
-            List<Questions> questionlist = new List<Questions>();
+            List<Question> questionlist = new List<Question>();
 
 
             while (reader.Read())
             {
-                var question = new Questions();
+                var question = new Question();
 
                 question.QuestionId = Convert.ToInt32(reader["QuestionID"]);
                 question.QuestionText = Convert.ToString(reader["QuestionText"]);

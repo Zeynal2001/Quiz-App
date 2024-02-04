@@ -1,6 +1,6 @@
 ﻿namespace Quiz_App.Models
 {
-    public class Quizzes
+    public class Quiz
     {
         public int QuizId { get; set; }
         public string QuizName { get; set; }

@@ -8,7 +8,7 @@ namespace Quiz_App.Services
 {
     public class AuthService
     {
-        public static Users Login(SqlConnection conn, UserRole loginType)
+        public static User Login(SqlConnection conn, UserRole loginType)
         {
             Console.WriteLine("\n-----------------------------------");
             ConsoleExtensions.PrintMessage("Xaiş edirik proqrama giriş etmək üçün aşağıda email adresinizi və şifrənizi daxil edin: ", Enums.MessageType.Info);
@@ -45,7 +45,7 @@ namespace Quiz_App.Services
                 throw new AuthException("Email vəya şifrə yanlışdır 😕.");
             }
 
-            Users user = new Users();
+            User user = new User();
 
             foreach (DataRow row in table.Rows)
             {

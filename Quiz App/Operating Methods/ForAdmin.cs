@@ -1,4 +1,5 @@
-﻿using Quiz_App.Extensions;
+﻿using Quiz_App.DataTransferObject;
+using Quiz_App.Extensions;
 using Quiz_App.Models;
 using Quiz_App.SELECTMethods;
 using System.Data;
@@ -15,7 +16,7 @@ namespace Quiz_App.Operating_Methods
                 conn.Open();
             }
 
-
+            Console.WriteLine("\n-----------------------------------");
             Console.WriteLine("Quiz adını daxil edin:");
             string name = InputExtensions.GetNonNullString();
 
@@ -28,6 +29,7 @@ namespace Quiz_App.Operating_Methods
             Console.WriteLine("Quizin kateqoriyasını aşağıda uyğun gələn rəqəm olaraq daxil edin:");
             Console.WriteLine("İngilis dili (1), Tarix (2), Proqramlaşdırma (3)");
             int categoryId = InputExtensions.GetInt();
+            Console.WriteLine("\n-----------------------------------");
 
             var sqlInsert = "INSERT INTO Quizzes(QuizName, DescriptionQ, StartTime, EndTime, CategoryID, QuizTitle) values(@PName, @PDescriptionQ, GETDATE(), NULL, @PCategoryid, @PTitle)";
 
@@ -76,8 +78,8 @@ namespace Quiz_App.Operating_Methods
             {
                 Console.WriteLine(q);
             });
-
-            Console.WriteLine("\nAşağıda məlumatlarını dəyişmək istədiyiniz quizin ID sini daxil edin.");
+            Console.WriteLine("\n-----------------------------------");
+            ConsoleExtensions.PrintMessage("\nAşağıda məlumatlarını dəyişmək istədiyiniz quizin ID sini daxil edin.", Enums.MessageType.Info);
             int quizId = InputExtensions.GetInt();
 
             /*
@@ -98,7 +100,7 @@ namespace Quiz_App.Operating_Methods
             Console.WriteLine("Quizin kateqoriyasını aşağıda uyğun gələn rəqəm olaraq daxil edin:");
             Console.WriteLine("İngilis dili (1), Tarix (2), Proqramlaşdırma (3)");
             int updatedCategoryId = InputExtensions.GetInt();
-
+            Console.WriteLine("\n-----------------------------------");
             var sqlUpdate = "UPDATE  Quizzes SET QuizName = @PName, DescriptionQ = @PDescription, StartTime = GetDate(), EndTime = NULL, CategoryID = @PcatId, QuizTitle = @Ptitle WHERE QuizID = @PquizId";
 
             var cmd = conn.CreateCommand();
@@ -134,8 +136,8 @@ namespace Quiz_App.Operating_Methods
             {
                 Console.WriteLine(q);
             });
-
-            Console.WriteLine("\nAşağıda silmək istədiyiniz quizin ID sini daxil edin.");
+            Console.WriteLine("\n-----------------------------------");
+            ConsoleExtensions.PrintMessage("\nAşağıda silmək istədiyiniz quizin ID sini daxil edin.", Enums.MessageType.Info);
             int removequizId = InputExtensions.GetInt();
 
             var sqlRemove = "DELETE FROM Quizzes WHERE QuizID = @PqId";
@@ -162,7 +164,7 @@ namespace Quiz_App.Operating_Methods
             {
                 conn.Open();
             }
-
+            Console.WriteLine("\n-----------------------------------");
             Console.WriteLine("Sualın mətnini daxil edin:");
             string questionText = InputExtensions.GetNonNullString();
 
@@ -183,7 +185,7 @@ namespace Quiz_App.Operating_Methods
             
             Console.WriteLine("QuizID ni daxil edin(int olaraq):");
             int quizID = InputExtensions.GetInt();
-
+            Console.WriteLine("\n-----------------------------------");
 
             var sqlInsert = "INSERT INTO Questions(QuestionText, CorrectOption, OptionA, OptionB, OptionC, OptionD, QuizID) values(@PMetn, @PDuzgunSecim, @PSecimA, @PSecimB, @PSecimC, @PSecimD, @QuizId)";
 
@@ -231,7 +233,8 @@ namespace Quiz_App.Operating_Methods
                 Console.WriteLine(q);
             });
 
-            Console.WriteLine("\nAşağıda məlumatlarını dəyişmək istədiyiniz sualın ID sini daxil edin.");
+            Console.WriteLine("\n-----------------------------------");
+            ConsoleExtensions.PrintMessage("\nAşağıda məlumatlarını dəyişmək istədiyiniz sualın ID sini daxil edin.", Enums.MessageType.Info);
             int questionId = InputExtensions.GetInt();
 
             Console.WriteLine("Sualın mətnini daxil edin:");
@@ -248,6 +251,7 @@ namespace Quiz_App.Operating_Methods
             string updatedOptionD = InputExtensions.GetNonNullString();
             Console.WriteLine("QuizID ni daxil edin(int olaraq):");
             int updatedQuizID = InputExtensions.GetInt();
+            Console.WriteLine("\n-----------------------------------");
 
             var sqlUpdate = "UPDATE  Questions SET QuestionText = @Ptext, CorrectOption = @Pcorrectoption, OptionA = @PoptionA, OptionB = @PoptionB, OptionC = @PoptionC, OptionD = @PoptionD, QuizID = @PquizId WHERE QuestionID = @PquestionId";
 
@@ -362,9 +366,9 @@ namespace Quiz_App.Operating_Methods
 
             Console.WriteLine("UserID       ||       FirstName        ||       LastName         ||      UserEmail      ||       UserPassword      ||      Roles      ||");
 
-            GetAllUsers.GetUsers(conn).ForEach(q =>
+            GetAllUsersAndScore.GetUsers(conn).ForEach(u =>
             {
-                Console.WriteLine(q);
+                Console.WriteLine(u);
             });
 
 
@@ -410,67 +414,53 @@ namespace Quiz_App.Operating_Methods
         //TODO: Yaddan Cixartma!
         public static void RemoveUser(SqlConnection conn)
         {
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.Open();
+            }
 
+            Console.WriteLine("UserID       ||       FirstName        ||       LastName         ||      UserEmail      ||       UserPassword      ||      Roles      ||");
+
+            GetAllUsersAndScore.GetUsers(conn).ForEach(u =>
+            {
+                Console.WriteLine(u);
+            });
+
+            Console.WriteLine("\nAşağıda silmək istədiyiniz istifadəçinin ID sini daxil edin.");
+            int removeuserId = InputExtensions.GetInt();
+
+            var sqlRemove = "DELETE FROM Users WHERE UserID = @PuserId";
+
+            var cmd = conn.CreateCommand();
+
+            cmd.CommandText = sqlRemove;
+            cmd.Parameters.AddWithValue("@PuserId", removeuserId);
+            var setirSayi = cmd.ExecuteNonQuery();
+
+            if (setirSayi > 0)
+            {
+                ConsoleExtensions.PrintMessage("İstifadəçi uğurla silindi ☑️", Enums.MessageType.Success);
+            }
+            else
+            {
+                ConsoleExtensions.PrintMessage("Xəta baş verdi 😕", Enums.MessageType.Error);
+            }
         }
 
 
-        public static List<Users> GetUsersStatistics(SqlConnection conn)
+        public static void GetUsersStatistics(SqlConnection conn)
         {
             if (conn.State != ConnectionState.Open)
             {
                 conn.Open();
             }
 
-            Console.WriteLine("ScoreID       ||       QuizID        ||       UserID         ||      CorrectAnswers      ||       IncorrectAnswers      ||      TotalScore      ||");
+            Console.WriteLine("ScoreID       ||       QuizID        ||       FullName        ||       UserID         ||      CorrectAnswers      ||       IncorrectAnswers      ||      TotalScore      ||");
 
-            GetAllUsers.GetUsers(conn).ForEach(q =>
+            UserScorDTO.JoinScore(conn).ForEach(uS =>
             {
-                Console.WriteLine(q);
+                Console.WriteLine(uS);
             });
-
-            /*
-            ScoreID
-            QuizID
-            UserID
-            CorrectAnswers
-            IncorrectAnswers
-            TotalScore
-            */
-            var select = "SELECT * FROM Score";
-
-            var cmd = conn.CreateCommand();
-            cmd.CommandText = select;
-            var reader = cmd.ExecuteReader();
-
-
-            List<Users> userlist = new List<Users>();
-
-
-            while (reader.Read())
-            {
-                var user = new Users();
-
-                user.UserId = Convert.ToInt32(reader["UserID"]);
-                user.FirstName = Convert.ToString(reader["FirstName"]);
-                user.LastName = Convert.ToString(reader["LastName"]);
-                user.UserEmail = Convert.ToString(reader["UserEmail"]);
-                user.UserPassword = Convert.ToString(reader["UserPassword"]);
-                user.Role = (UserRole)Convert.ToInt32(reader["Roles"]);
-
-                userlist.Add(user);
-            }
-            reader.Close();
-
-            return userlist;
-
-            /*
-            UserID
-            FirstName
-            LastName
-            UserEmail
-            UserPassword
-            Roles
-            */
         }
     }
 }
