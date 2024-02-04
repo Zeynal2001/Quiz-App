@@ -159,7 +159,7 @@ switch (girisTipi)
                         break;
                     //İştirak etdiyi quizlərə və nəticələrinə baxmaq
                     case 2:
-                        var scores = UserScorDTO.JoinScore(conn, user.UserId);
+                        var scores = UserScorDTO.LookingAtYourOwnScore(conn,user.UserId);
                         foreach (var score in scores)
                         {
                             ConsoleExtensions.PrintMessage("\n-----------------------------------", MessageType.Success);

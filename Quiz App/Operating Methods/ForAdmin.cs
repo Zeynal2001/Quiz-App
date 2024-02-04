@@ -1,6 +1,5 @@
 ﻿using Quiz_App.DataTransferObject;
 using Quiz_App.Extensions;
-using Quiz_App.Models;
 using Quiz_App.SELECTMethods;
 using System.Data;
 using System.Data.SqlClient;
@@ -457,7 +456,7 @@ namespace Quiz_App.Operating_Methods
 
             Console.WriteLine("ScoreID       ||       QuizID        ||       FullName        ||       UserID         ||      CorrectAnswers      ||       IncorrectAnswers      ||      TotalScore      ||");
 
-            UserScorDTO.JoinScore(conn).ForEach(uS =>
+            UserScorDTO.GetScore(conn).ForEach(uS =>
             {
                 Console.WriteLine(uS);
             });
