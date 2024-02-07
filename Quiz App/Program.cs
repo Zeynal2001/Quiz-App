@@ -53,10 +53,10 @@ switch (secim1)
                         AuthService.Register(conn, UserRole.Admin);
                         duzdurmu = false;
                         break;
-                    //Geri qayitmaq
+                    //Proqramı dayandırmaq
                     case 3:
-
-                        break;
+                        ConsoleExtensions.PrintMessage("Proqram bağlandı.");
+                        return;
                     default:
                         //Yanlış seçim
                         ConsoleExtensions.PrintMessage("Yanlış seçim etmisiniz 😕.", MessageType.Error);
@@ -102,10 +102,10 @@ switch (secim1)
                         AuthService.Register(conn, UserRole.User);
                         duzdurmu2 = false;
                         break;
-                    //Geri qayitmaq
+                    //Proqramı dayandırmaq
                     case 3:
-
-                        break;
+                        ConsoleExtensions.PrintMessage("Proqram bağlandı.");
+                        return;
                     default:
                         //Yanlış seçim
                         ConsoleExtensions.PrintMessage("Yanlış seçim etmisiniz 😕.", MessageType.Error);
@@ -155,12 +155,9 @@ switch (girisTipi)
                 {
                     //Quizə başlamaq
                     case 1:
-
-                        break;
-                    //İştirak etdiyi quizlərə və nəticələrinə baxmaq
-                    case 2:
-                        var scores = UserScorDTO.LookingAtYourOwnScore(conn,user.UserId);
-                        foreach (var score in scores)
+                        ForUser.StartQuiz(conn, user.UserId);
+                        var scores1 = UserScorDTO.LookingAtYourOwnScore(conn, user.UserId);
+                        foreach (var score in scores1)
                         {
                             ConsoleExtensions.PrintMessage("\n-----------------------------------", MessageType.Success);
                             Console.WriteLine($"Adınız və Familyanız :{score.FullName} || İştirak etdiyiniz sınaqlar: {score.QuizId}");
@@ -170,10 +167,23 @@ switch (girisTipi)
                         }
                         duzdurmu1 = false;
                         break;
+                    //İştirak etdiyi quizlərə və nəticələrinə baxmaq
+                    case 2:
+                        var scores2 = UserScorDTO.LookingAtYourOwnScore(conn,user.UserId);
+                        foreach (var scorum in scores2)
+                        {
+                            ConsoleExtensions.PrintMessage("\n-----------------------------------", MessageType.Success);
+                            Console.WriteLine($"Adınız və Familyanız :{scorum.FullName} || İştirak etdiyiniz sınaqlar: {scorum.QuizId}");
+                            Console.WriteLine($" Düzgün cavabların sayı: {scorum.CorrectAnswers} Yanlış cavabların sayı {scorum.IncorrectAnswers}");
+                            Console.WriteLine($"Total xalınız: {scorum.TotalScore}");
+                            ConsoleExtensions.PrintMessage("\n-----------------------------------", MessageType.Success);
+                        }
+                        duzdurmu1 = false;
+                        break;
                     //Proqramı dayandırmaq
                     case 3:
-
-                        break;
+                        ConsoleExtensions.PrintMessage("Proqram bağlandı.");
+                        return;
                     default:
                         //Yanlış seçim
                         ConsoleExtensions.PrintMessage("Yanlış seçim etmisiniz 😕.", MessageType.Error);
@@ -188,7 +198,7 @@ switch (girisTipi)
             finally
             {
                 // Bura əlavə təmizləmə və ya başqa tədbirlər əlavə edilə bilər.
-                Thread.Sleep(3000);
+                Thread.Sleep(100000);
                 Console.Clear();
             }
         }
@@ -256,7 +266,7 @@ switch (girisTipi)
                         ForAdmin.GetUsersStatistics(conn);
                         duzdurmu2 = false;
                         break;
-                    //Proqramı dayandır
+                    //Proqramı dayandırmaq
                     case 11:
                         ConsoleExtensions.PrintMessage("Proqram bağlandı.");
                         return;

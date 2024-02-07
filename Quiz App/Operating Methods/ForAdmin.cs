@@ -73,7 +73,7 @@ namespace Quiz_App.Operating_Methods
             //var quizzes = QuizCrud.SelectQuizzes(conn);
             //quizzes.ForEach(Console.WriteLine);
 
-            QuizAndQuestionCrud.SelectQuizzes(conn).ForEach(q =>
+            QuizQuestionAndAnswerCrud.GetQuizzes(conn).ForEach(q =>
             {
                 Console.WriteLine(q);
             });
@@ -131,7 +131,7 @@ namespace Quiz_App.Operating_Methods
 
             Console.WriteLine("QuizID       ||       QuizName        ||       DescriptionQ         ||      StartTime      ||       EndTime      ||      CategoryID      ||       QuizTitle");
 
-            QuizAndQuestionCrud.SelectQuizzes(conn).ForEach(q =>
+            QuizQuestionAndAnswerCrud.GetQuizzes(conn).ForEach(q =>
             {
                 Console.WriteLine(q);
             });
@@ -166,22 +166,16 @@ namespace Quiz_App.Operating_Methods
             Console.WriteLine("\n-----------------------------------");
             Console.WriteLine("Sualın mətnini daxil edin:");
             string questionText = InputExtensions.GetNonNullString();
-
-            Console.WriteLine("Sualın düzgün cavabını daxil edin: (A,B,C,D)");
-            string correctOption = InputExtensions.GetNonNullString();
-
             Console.WriteLine("A) variantının mətnini daxil edin:");
             string optionA = InputExtensions.GetNonNullString();
-            
             Console.WriteLine("B) variantının mətnini daxil edin:");
             string optionB = InputExtensions.GetNonNullString();
-
             Console.WriteLine("C) variantının mətnini daxil edin:");
             string optionC = InputExtensions.GetNonNullString();
-            
             Console.WriteLine("D) variantının mətnini daxil edin:");
             string optionD = InputExtensions.GetNonNullString();
-            
+            Console.WriteLine("Sualın düzgün cavabını daxil edin: (A,B,C,D)");
+            string correctOption = InputExtensions.GetNonNullString();
             Console.WriteLine("QuizID ni daxil edin(int olaraq):");
             int quizID = InputExtensions.GetInt();
             Console.WriteLine("\n-----------------------------------");
@@ -204,8 +198,6 @@ namespace Quiz_App.Operating_Methods
                 ConsoleExtensions.PrintMessage("Sual uğurla yaradıldı ☑️", Enums.MessageType.Success);
             else
                 ConsoleExtensions.PrintMessage("Xəta baş verdi 😕", Enums.MessageType.Error);
-
-
             /*
             QuestionID
             QuestionText
@@ -227,7 +219,7 @@ namespace Quiz_App.Operating_Methods
 
             Console.WriteLine("QuestionID       ||       QuestionText        ||       CorrectOption         ||      OptionA      ||       OptionB      ||      OptionC      ||       OptionD      ||      QuizID      ||");
 
-            QuizAndQuestionCrud.SelectQuestions(conn).ForEach(q =>
+            QuizQuestionAndAnswerCrud.GetQuestions(conn).ForEach(q =>
             {
                 Console.WriteLine(q);
             });
@@ -286,7 +278,7 @@ namespace Quiz_App.Operating_Methods
 
             Console.WriteLine("QuestionID       ||       QuestionText        ||       CorrectOption         ||      OptionA      ||       OptionB      ||      OptionC      ||       OptionD      ||      QuizID      ||");
 
-            QuizAndQuestionCrud.SelectQuestions(conn).ForEach(q =>
+            QuizQuestionAndAnswerCrud.GetQuestions(conn).ForEach(q =>
             {
                 Console.WriteLine(q);
             });
@@ -410,7 +402,6 @@ namespace Quiz_App.Operating_Methods
             }
         }
 
-        //TODO: Yaddan Cixartma!
         public static void RemoveUser(SqlConnection conn)
         {
             if (conn.State != ConnectionState.Open)
