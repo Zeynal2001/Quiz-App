@@ -154,12 +154,7 @@ INSERT INTO Score
 Values 
 	(3, 5, 1, 0, 10)
 
-SELECT * FROM Score
-SELECT * FROM Questions
-SELECT * FROM Answers
-SELECT * FROM Users
-SELECT * FROM Quizzes
-SELECT * FROM Categories
+
 
 ALTER TABLE Answers
 ADD  AnswerID int PRIMARY KEY IDENTITY
@@ -168,3 +163,48 @@ select * from Score
 truncate table score
 
 SELECT * FROM Score WHERE QuizID AND UserID 
+
+UPDATE Quizzes
+SET EndTime = TRY_CONVERT(int, EndTime)
+
+ALTER TABLE Quizzes
+ADD EndTime int
+
+create table ##Quizzes(
+	QuizId int,
+	QuizName nvarchar(max),
+	DescriptionQ nvarchar(max),
+	StartTime DateTime,
+	EndTime int,
+	CategoryID int,
+	QuizTitle nvarchar(max)
+)
+
+insert into ##Quizzes
+select QuizID, QuizName, DescriptionQ, StartTime, CAST(EndTime as int), CategoryId, QuizTitle from Quizzes
+
+delete Quizzes
+
+
+
+sp_help Quizzes
+
+select * from ##Quizzes
+
+SET IDENTITY_INSERT Quizzes ON
+GO
+insert into Quizzes(QuizName, DescriptionQ, StartTime, EndTime, CategoryId, QuizTitle)
+select QuizName, DescriptionQ, StartTime, EndTime , CategoryId, QuizTitle  from ##Quizzes
+GO
+SET IDENTITY_INSERT Quizzes OFF
+GO
+
+SELECT * FROM Score
+SELECT * FROM Questions
+SELECT * FROM Answers
+SELECT * FROM Users
+SELECT * FROM Quizzes
+SELECT * FROM Categories
+
+INSERT INTO Quizzes(EndTime)
+VALUES()

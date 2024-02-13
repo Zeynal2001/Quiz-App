@@ -13,7 +13,6 @@ namespace Quiz_App.Extensions
             if (!int.TryParse(Console.ReadLine(), out eded))
             {
                 ConsoleExtensions.PrintMessage(_errorMesage, MessageType.Error);
-
             }
 
             return eded;

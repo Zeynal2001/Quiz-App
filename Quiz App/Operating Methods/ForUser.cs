@@ -5,12 +5,14 @@ using Quiz_App.Models;
 using Quiz_App.SELECTMethods;
 using System.Data;
 using System.Data.SqlClient;
+using System.Net.Http.Headers;
 
 namespace Quiz_App.Operating_Methods
 {
     public class ForUser
     {
-        public static void StartQuiz(SqlConnection conn, int userId)
+
+        public static async Task StartQuizAsync(SqlConnection conn, int userId)
         {
             if (conn.State != ConnectionState.Open)
             {
@@ -25,15 +27,22 @@ namespace Quiz_App.Operating_Methods
             });
 
             Console.WriteLine("\n-----------------------------------");
-            ConsoleExtensions.PrintMessage("Xaiş edirik aşağıda başlamaq istədiyiniz quizin ID sini daxil edin: ", Enums.MessageType.Info);
+            ConsoleExtensions.PrintMessage("Xaiş edirik aşağıda başlamaq istədiyiniz quizin ID sini daxil edin: ", MessageType.Info);
             int quizId = InputExtensions.GetInt();
+
 
             var questions = QuizQuestionAndAnswerCrud.GetQuestionsByQuizId(conn, quizId);
 
             var answers = new List<Answer>();
             var counter = 1;
+
+
+            var quiz = GetQuizById(conn, quizId);
+            var startTime = DateTime.Now;
+
             foreach (var question in questions)
             {
+                Console.WriteLine(Thread.CurrentThread.Name);
                 Console.WriteLine($"{counter}) {question.QuestionText}");
                 Console.WriteLine($"A) {question.OptionA}");
                 Console.WriteLine($"B) {question.OptionB}");
@@ -42,16 +51,7 @@ namespace Quiz_App.Operating_Methods
                 counter++;
                 Console.WriteLine("Düzgün variantı daxil edin: (A,B,C,D)");
                 string usercorrectOption = InputExtensions.GetNonNullString();
-
-                //answers.Add(new()
-                //{
-                //    IsCorrect = (question.CorrectOption == usercorrectOption),
-                //    QuestionId = question.QuestionId,
-                //    UserChoise = usercorrectOption,
-                //    UserId = userId,
-                //    AnswerText = null
-                //});
-                
+               
                 if (question.CorrectOption == usercorrectOption)
                 {
                     ConsoleExtensions.PrintMessage("Təbriklər düzgün cavab verdiniz. Total xalınız: ", MessageType.Success);
@@ -74,7 +74,21 @@ namespace Quiz_App.Operating_Methods
                         UserId = userId
                     });
                 }
-                
+                if ((DateTime.Now - startTime).Minutes == quiz.EndTime)
+                {
+                    ConsoleExtensions.PrintMessage("Quizin bitdi", MessageType.Info);
+                    break;  
+                }
+
+
+                //answers.Add(new()
+                //{
+                //    IsCorrect = (question.CorrectOption == usercorrectOption),
+                //    QuestionId = question.QuestionId,
+                //    UserChoise = usercorrectOption,
+                //    UserId = userId,
+                //    AnswerText = null
+                //});
             }
             //TODO: Answerə insert elemek
 
@@ -85,7 +99,9 @@ namespace Quiz_App.Operating_Methods
             var setirSayi = 0;
             foreach (var answer in answers)
             {
+
                 cmd.CommandText = sqlanswerInsert;
+                cmd.Parameters.Clear();
                 cmd.Parameters.AddWithValue("@Puserchoise", answer.UserChoise);
                 cmd.Parameters.AddWithValue("@Piscorrect", answer.IsCorrect);
                 cmd.Parameters.AddWithValue("@PquestionId", answer.QuestionId);
@@ -155,6 +171,40 @@ namespace Quiz_App.Operating_Methods
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        public static Quiz GetQuizById(SqlConnection conn, int quizId)
+        {
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.Open();
+            }
+
+            var GetQuizById = "SELECT * FROM Quizzes WHERE QuizID = @Pquizid";
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = GetQuizById;
+            cmd.Parameters.AddWithValue("@Pquizid", quizId);
+
+            var reader = cmd.ExecuteReader();
+
+            var quiz = new Quiz();
+            while (reader.Read())
+            {
+
+                quiz.QuizId = Convert.ToInt32(reader["QuizID"]);
+                quiz.QuizName = Convert.ToString(reader["QuizName"]);
+                quiz.Description = Convert.ToString(reader["DescriptionQ"]);
+                DateTime.TryParse(reader["StartTime"].ToString(), out DateTime startDate);
+                quiz.StartTime = startDate;
+                quiz.EndTime = Convert.ToInt32(reader["EndTime"]);
+                quiz.CategoryId = Convert.ToInt32(reader["CategoryID"]);
+                quiz.QuizTitle = Convert.ToString(reader["QuizTitle"]);
+            }
+
+            reader.Close();
+            return quiz;
+
         }
     }
 }

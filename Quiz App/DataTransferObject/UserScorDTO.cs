@@ -14,6 +14,11 @@ namespace Quiz_App.DataTransferObject
         public int TotalScore { get; set; }
 
 
+        public override string ToString()
+        {
+            return $"{ScoreId}, {UserId}, {QuizId}, {FullName}, {CorrectAnswers}, {IncorrectAnswers}, {TotalScore}";
+        }
+
         public static List<UserScorDTO> GetScore(SqlConnection conn)
         {
             if (conn.State != ConnectionState.Open)
@@ -38,7 +43,7 @@ namespace Quiz_App.DataTransferObject
                 userscore.ScoreId = Convert.ToInt32(reader["ScoreID"]);
                 userscore.QuizId = Convert.ToInt32(reader["QuizID"]);
                 userscore.UserId = Convert.ToInt32(reader["UserID"]);
-                userscore.FullName = reader["Istideci Adi"].ToString();
+                userscore.FullName = reader["Istifadeci Adi"].ToString();
                 userscore.CorrectAnswers = Convert.ToInt32(reader["CorrectAnswers"]);
                 userscore.IncorrectAnswers = Convert.ToInt32(reader["IncorrectAnswers"]);
                 userscore.TotalScore = Convert.ToInt32(reader["TotalScore"]);

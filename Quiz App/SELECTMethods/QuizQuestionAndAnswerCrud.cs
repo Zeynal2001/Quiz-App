@@ -32,8 +32,9 @@ namespace Quiz_App.SELECTMethods
                 quiz.Description = Convert.ToString(reader["DescriptionQ"]);
                 DateTime.TryParse(reader["StartTime"].ToString(), out DateTime startDate);
                 quiz.StartTime  = startDate;
-                DateTime.TryParse(reader["EndTime"].ToString(), out DateTime endDate);
-                quiz.EndTime = endDate;
+                //DateTime.TryParse(reader["EndTime"].ToString(), out DateTime endDate);
+                //quiz.EndTime = endDate;
+                quiz.EndTime = Convert.ToInt32(reader["EndTime"]);
                 quiz.CategoryId = Convert.ToInt32(reader["CategoryID"]);
                 quiz.QuizTitle = Convert.ToString(reader["QuizTitle"]);
 
@@ -43,6 +44,7 @@ namespace Quiz_App.SELECTMethods
 
             return quizlist;
         }
+
 
         public static List<Quiz> GetQuizzes2(SqlConnection conn)
         {

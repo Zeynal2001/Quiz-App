@@ -25,26 +25,52 @@ namespace Quiz_App.Operating_Methods
             Console.WriteLine("Description u daxil edin:");
             string descriptionQ = InputExtensions.GetNonNullString();
 
+            Console.WriteLine("Quzin başlayandan neçə dəqiqə sonra bitəcəyni daxil edin: ");
+            int? endTime = InputExtensions.GetInt();
+
             Console.WriteLine("Quizin kateqoriyasını aşağıda uyğun gələn rəqəm olaraq daxil edin:");
             Console.WriteLine("İngilis dili (1), Tarix (2), Proqramlaşdırma (3)");
             int categoryId = InputExtensions.GetInt();
             Console.WriteLine("\n-----------------------------------");
 
-            var sqlInsert = "INSERT INTO Quizzes(QuizName, DescriptionQ, StartTime, EndTime, CategoryID, QuizTitle) values(@PName, @PDescriptionQ, GETDATE(), NULL, @PCategoryid, @PTitle)";
+            if (endTime == null)
+            {
+                var sqlInsert = "INSERT INTO Quizzes(QuizName, DescriptionQ, StartTime, EndTime, CategoryID, QuizTitle) values(@PName, @PDescriptionQ, GETDATE(), NULL, @PCategoryid, @PTitle)";
 
-            var cmd = conn.CreateCommand();
-            cmd.CommandText = sqlInsert;
-            cmd.Parameters.AddWithValue("@PName", name);
-            cmd.Parameters.AddWithValue("@PTitle", title);
-            cmd.Parameters.AddWithValue("@PDescriptionQ", descriptionQ);
-            cmd.Parameters.AddWithValue("@PCategoryid", categoryId);
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = sqlInsert;
+                cmd.Parameters.AddWithValue("@PName", name);
+                cmd.Parameters.AddWithValue("@PTitle", title);
+                cmd.Parameters.AddWithValue("@PDescriptionQ", descriptionQ);
+                cmd.Parameters.AddWithValue("@PCategoryid", categoryId);
 
-            var setirSayi = cmd.ExecuteNonQuery();
+                var setirSayi = cmd.ExecuteNonQuery();
 
-            if (setirSayi > 0)
-                ConsoleExtensions.PrintMessage("Quiz uğurla yaradıldı ☑️", Enums.MessageType.Success);
+                if (setirSayi > 0)
+                    ConsoleExtensions.PrintMessage("Quiz uğurla yaradıldı ☑️", Enums.MessageType.Success);
+                else
+                    ConsoleExtensions.PrintMessage("Xəta baş verdi 😕", Enums.MessageType.Error);
+            }
             else
-                ConsoleExtensions.PrintMessage("Xəta baş verdi 😕", Enums.MessageType.Error);
+            {
+                var sqlInsert = "INSERT INTO Quizzes(QuizName, DescriptionQ, StartTime, EndTime, CategoryID, QuizTitle) values(@PName, @PDescriptionQ, GETDATE(), @PendTime, @PCategoryid, @PTitle)";
+
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = sqlInsert;
+                cmd.Parameters.AddWithValue("@PName", name);
+                cmd.Parameters.AddWithValue("@PTitle", title);
+                cmd.Parameters.AddWithValue("@PDescriptionQ", descriptionQ);
+                cmd.Parameters.AddWithValue("@PCategoryid", categoryId);
+                cmd.Parameters.AddWithValue("@PendTime", endTime);
+
+                var setirSayi = cmd.ExecuteNonQuery();
+
+                if (setirSayi > 0)
+                    ConsoleExtensions.PrintMessage("Quiz uğurla yaradıldı ☑️", Enums.MessageType.Success);
+                else
+                    ConsoleExtensions.PrintMessage("Xəta baş verdi 😕", Enums.MessageType.Error);
+            }
+
             /*
             QuizName
             DescriptionQ
@@ -445,7 +471,7 @@ namespace Quiz_App.Operating_Methods
                 conn.Open();
             }
 
-            Console.WriteLine("ScoreID       ||       QuizID        ||       FullName        ||       UserID         ||      CorrectAnswers      ||       IncorrectAnswers      ||      TotalScore      ||");
+            Console.WriteLine("ScoreID||QuizID||FullName||UserID||CorrectAnswers||IncorrectAnswers||TotalScore||");
 
             UserScorDTO.GetScore(conn).ForEach(uS =>
             {
