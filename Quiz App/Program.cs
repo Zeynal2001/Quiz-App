@@ -319,8 +319,6 @@ switch (girisTipi)
 }
 
 
-
-
 conn.Close();
 if (conn.State == System.Data.ConnectionState.Closed)
     ConsoleExtensions.PrintMessage("Connection bağlandı və ya uğursuz oldu", MessageType.Info);

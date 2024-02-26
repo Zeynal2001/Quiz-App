@@ -39,7 +39,6 @@ namespace Quiz_App.SELECTMethods
             reader.Close();
 
             return userlist;
-
             /*
             UserID
             FirstName
